@@ -1,0 +1,3 @@
+[submodule "quantization-QAT/sampleQAT"]
+	path = quantization-QAT/sampleQAT
+	url = https://github.com/NVIDIA/sampleQAT.git
