@@ -7,7 +7,7 @@ This note provides a recipe to run QAT using ResNet-50 example (TF->ONNX-TensorR
 * [Setup](#setup)
     * [Requirements](#requirements)
 * [Step by Step Guide](#step-by-step-guide)
-* [Advanced](#advanced)
+* [Reference](#reference)
 
 ## Setup
 
@@ -91,8 +91,7 @@ python3 -m pip install -r sampleQAT/requirements.txt
    
     ```bash
     ll result_dir/
-    
-    
+
     -rw-r--r--  1 root root       271 Mar 26 08:46 checkpoint
     -rw-r--r--  1 root root         8 Mar 26 08:32 model.ckpt-6000.data-00000-of-00002
     -rw-r--r--  1 root root 204687240 Mar 26 08:32 model.ckpt-6000.data-00001-of-00002
@@ -119,7 +118,7 @@ Note:
 		* `--output` : Output folder of the new checkpoint file which has the FC layer weights reshaped into 1x1 conv layer weights.
 
 
-#### Step 2: Export frozen graph of RN50 QAT 
+### Step 2: Export frozen graph of RN50 QAT 
 
 To export frozen graphs (which can be used for inference with <a href="https://developer.nvidia.com/tensorrt">TensorRT</a>), use:
 
@@ -132,7 +131,7 @@ CUDA_VISIBLE_DEVICES=6 python3 export_frozen_graph.py --checkpoint $PATH_TO_CHEC
 
 ```
 
-#### Step 3: Constant folding
+### Step 3: Constant folding
 
 run the following command to perform constant folding on TF graph
 
@@ -207,8 +206,6 @@ Arguments:
 * `--onnx` : Path to RN50 QAT onnx graph 
 * `--engine` : Output file name of TensorRT engine.
 * `--verbose` : Flag to enable verbose logging
-
-
 
 
 ### Step 7: TensorRT Inference
