@@ -17,7 +17,7 @@ To demonstrate how the calibration dataset size influences the accuracy after in
 ```bash
 git clone https://github.com/chrjxj/tensorrt_experiments.git
 
-cd tensorrt_experiments
+cd tensorrt_experiments/quantization_demo_cifar10
 
 pip install -r requirements.txt
 
@@ -28,9 +28,8 @@ sh download_files.sh
 3. start
 
 ```bash
-python sample.py
+python sample.py --onnx_model resnet18.onnx --calib_folder cifar10_dataset/calib_dataset_40/ -t cifar10_dataset/test_batch -b 32
 ```
-
     
 4. If you want to use the whole test dataset to do the calibration. You can use `convert_to_images.py` to convert the cifar10 `test_batch` file into jpeg images. 
 

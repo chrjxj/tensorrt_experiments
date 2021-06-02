@@ -22,13 +22,12 @@ import numpy as np
 import pickle
 
 # For our custom calibrator
-from calibrator import MNISTEntropyCalibrator
+from .calibrator import MNISTEntropyCalibrator
 
 sys.path.insert(1, os.path.join(sys.path[0], os.path.pardir))
 import common
 
-# TRT_LOGGER = trt.Logger(trt.Logger.VERBOSE)
-TRT_LOGGER = trt.Logger()
+TRT_LOGGER = trt.Logger()  # TRT_LOGGER = trt.Logger(trt.Logger.VERBOSE)
 
 
 # This function builds an engine from a Caffe model.
@@ -142,7 +141,7 @@ def main(onnx_model, calib_folder, test_data_file, batch_size=32):
     # We also allow it to cache calibration data for faster engine building.
 
     calibration_cache = "calibration.cache"
-    calib = MNISTEntropyCalibrator(calib_folder, cache_file=calibration_cache, total_images=40, batch_size=10)
+    calib = MNISTEntropyCalibrator(calib_folder, cache_file=calibration_cache, batch_size=10)
 
     # Inference batch size can be different from calibration batch size.
     with build_int8_engine(onnx_model, calib, batch_size) as engine, engine.create_execution_context() as context:

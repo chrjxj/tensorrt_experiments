@@ -14,9 +14,10 @@
 # limitations under the License.
 #
 
-import tensorrt as trt
-import os
 
+import os
+from glob import glob
+import tensorrt as trt
 import pycuda.driver as cuda
 import pycuda.autoinit
 from PIL import Image
@@ -30,10 +31,15 @@ def data_Normalize(batch_data, mean_list=[0.4914, 0.4822, 0.4465], std_list=[0.2
     return batch_data
 
 # Returns a numpy buffer of shape (num_images, 1, 32, 32)
-def load_mnist_jpeg_images(folder_path, total_images=1):
+def load_mnist_jpeg_images(folder_path, file_ext="*.jpg"):
     image_idx = 0
+
+    img_files = glob(os.path.join(folder_path, file_ext))
+    total_images = len(img_files)
+    img_files.sort()
+
     calib_images = np.zeros((total_images, 3, 32, 32))
-    for filename in os.listdir(folder_path):
+    for filename in img_files:
         print(folder_path + filename)
         img = Image.open(folder_path + filename)
         calib_images[image_idx] = np.array(img).transpose(2, 0, 1) / 255
@@ -46,14 +52,14 @@ def load_mnist_jpeg_images(folder_path, total_images=1):
 
 class MNISTEntropyCalibrator(trt.IInt8EntropyCalibrator2):
     # class MNISTEntropyCalibrator(trt.IInt8MinMaxCalibrator):
-    def __init__(self, training_data, cache_file, total_images, batch_size=1):
+    def __init__(self, training_data, cache_file, batch_size=1):
         # Whenever you specify a custom constructor for a TensorRT class,
         # you MUST call the constructor of the parent explicitly.
         trt.IInt8EntropyCalibrator2.__init__(self)
         # trt.IInt8MinMaxCalibrator.__init__(self)
 
         # Prepare data for the the following
-        self.data = load_mnist_jpeg_images(training_data, total_images)
+        self.data = load_mnist_jpeg_images(training_data)
         self.cache_file = cache_file
         self.batch_size = batch_size
         self.current_index = 0
