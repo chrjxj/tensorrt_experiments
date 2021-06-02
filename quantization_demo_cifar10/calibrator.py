@@ -40,8 +40,8 @@ def load_mnist_jpeg_images(folder_path, file_ext="*.jpg"):
 
     calib_images = np.zeros((total_images, 3, 32, 32))
     for filename in img_files:
-        print(folder_path + filename)
-        img = Image.open(folder_path + filename)
+        print(filename)
+        img = Image.open(filename)
         calib_images[image_idx] = np.array(img).transpose(2, 0, 1) / 255
         # calib_images[image_idx] = (calib_images[image_idx]-0.45)/0.20
         calib_images[image_idx] = data_Normalize(calib_images[image_idx])
